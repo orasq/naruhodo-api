@@ -1,8 +1,17 @@
+import { KuromojiToken } from "kuromojin";
 import { tags } from "../utils/functions/getDictionaryTag";
 
 export type BatchItem = {
   baseText: string;
   index: number;
+};
+
+
+
+export type WordToken = {
+  index: number;
+  baseText: string;
+  tokens: KuromojiToken[];
 };
 
 export type DBWord = {

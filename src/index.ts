@@ -4,14 +4,15 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors'
 import { serve } from '@hono/node-server';
-import { getTokens } from './controllers/tokenizerController';
+import { getDictionaryEntries } from './lib/utils/functions/getDictionaryEntries';
+import { getTokens } from './lib/utils/functions/getTokens';
 
 const app = new Hono();
 
 app.use(
   '/api/*',
   cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3000', 'https://main--inspiring-cendol-8aec0d.netlify.app'],
   })
 )
 
@@ -23,7 +24,9 @@ app.post('/api/tokenize', async (c) => {
       return c.json({ error: 'Invalid paragraphs input' }, 400);
     }
 
-    const parsedText = await getTokens(paragraphs);
+    const wordTokens = await getTokens(paragraphs);
+    const parsedText = await getDictionaryEntries(wordTokens);
+
     return c.json({ parsedText }, 200);
   } catch (error) {
     console.error(error);

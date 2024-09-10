@@ -1,9 +1,24 @@
-import { tokenize, type KuromojiToken } from "kuromojin";
+import { getTokenizer, tokenize, type KuromojiToken } from "kuromojin";
+import type { BatchItem } from "../../types/types";
 
 type SkippableKuromojiToken = KuromojiToken & { skip: boolean };
 
-export async function getTextTokens(text: string) {
-  return reduceParsedParagraphs(await tokenize(text));
+export async function getTokens(paragraphs: BatchItem[]) {
+  // Initialize tokenizer
+  await getTokenizer();
+
+  const parsedParagraphs = await Promise.all(
+    paragraphs.map(async (paragraph) => {
+      const tokens = reduceParsedParagraphs(await tokenize(paragraph.baseText));
+
+      return {
+        ...paragraph,
+        tokens: tokens,
+      };
+    }),
+  );
+
+  return parsedParagraphs;
 }
 
 function reduceParsedParagraphs(parsedParagraphs: KuromojiToken[]) {
