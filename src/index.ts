@@ -1,8 +1,5 @@
-
-
-
 import { Hono } from 'hono';
-import { cors } from 'hono/cors'
+import { cors } from 'hono/cors';
 import { serve } from '@hono/node-server';
 import { getDictionaryEntries } from './lib/utils/functions/getDictionaryEntries';
 import { getTokens } from './lib/utils/functions/getTokens';
@@ -12,9 +9,13 @@ const app = new Hono();
 app.use(
   '/api/*',
   cors({
-    origin: ['http://localhost:3000', 'https://main--inspiring-cendol-8aec0d.netlify.app'],
-  })
-)
+    origin: [
+      'http://localhost:3000',
+      'https://main--inspiring-cendol-8aec0d.netlify.app',
+      'https://inspiring-cendol-8aec0d.netlify.app',
+    ],
+  }),
+);
 
 app.post('/api/tokenize', async (c) => {
   try {
@@ -34,11 +35,10 @@ app.post('/api/tokenize', async (c) => {
   }
 });
 
-const port = 8080
-console.log(`Server is running on port ${port}`)
+const port = 8080;
+console.log(`Server is running on port ${port}`);
 
 serve({
   fetch: app.fetch,
-  port
-})
-
+  port,
+});

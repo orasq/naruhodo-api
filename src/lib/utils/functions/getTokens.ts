@@ -1,5 +1,5 @@
-import { getTokenizer, tokenize, type KuromojiToken } from "kuromojin";
-import type { BatchItem } from "../../types/types";
+import { getTokenizer, tokenize, type KuromojiToken } from 'kuromojin';
+import type { BatchItem } from '../../types/types';
 
 type SkippableKuromojiToken = KuromojiToken & { skip: boolean };
 
@@ -10,11 +10,7 @@ export async function getTokens(paragraphs: BatchItem[]) {
   const parsedParagraphs = await Promise.all(
     paragraphs.map(async (paragraph) => {
       const tokens = reduceParsedParagraphs(await tokenize(paragraph.baseText));
-
-      return {
-        ...paragraph,
-        tokens: tokens,
-      };
+      return { ...paragraph, tokens: tokens };
     }),
   );
 
@@ -63,29 +59,51 @@ function reduceParsedParagraphs(parsedParagraphs: KuromojiToken[]) {
 }
 
 function shouldMergeWithNext(token: KuromojiToken, nextToken: KuromojiToken) {
-  return (
-    (["連用形", "未然形", "連用タ接続"].includes(token.conjugated_form) &&
-      nextToken.pos === "助動詞") ||
-    // (["未然形"].includes(token.conjugated_form) &&
-    //   nextToken.pos_detail_1 === "接尾") ||
-    (["連用タ接続", "連用形"].includes(token.conjugated_form) &&
-      nextToken.pos_detail_1 === "接続助詞") ||
-    (token.basic_form === "ん" &&
-      token.pos_detail_1 === "非自立" &&
-      nextToken.basic_form === "です")
-  );
+  if (
+    ['連用形', '未然形', '連用タ接続'].includes(token.conjugated_form) &&
+    nextToken.pos === '助動詞'
+  )
+    return true;
+
+  if (
+    ['未然形'].includes(token.conjugated_form) &&
+    nextToken.pos_detail_1 === '接尾'
+  )
+    return true;
+
+  if (
+    ['連用タ接続', '連用形'].includes(token.conjugated_form) &&
+    nextToken.pos_detail_1 === '接続助詞'
+  )
+    return true;
+
+  if (
+    token.basic_form === 'ん' &&
+    token.pos_detail_1 === '非自立' &&
+    nextToken.basic_form === 'です'
+  )
+    return true;
+
+  return false;
 }
 
 function shouldMergeWithPrev(token: KuromojiToken) {
-  return (
-    // token.pos === "krkrkr"
-    (token.pos === "助動詞" && token.conjugated_form === "体言接続") ||
-    (token.pos_detail_1 === "接尾" && token.pos_detail_2 === "助数詞") ||
-    // (token.pos === "助動詞" && token.conjugated_form === "基本形") ||
-    // (token.pos === "助詞" && token.pos_detail_2 === "連語") ||
-    // (token.pos === "助詞" && token.pos_detail_1 === "接続助詞") ||
-    (token.pos === "動詞" &&
-      token.conjugated_type === "一段" &&
-      token.pos_detail_1 === "非自立")
-  );
+  if (token.pos === '助動詞' && token.conjugated_form === '体言接続')
+    return true;
+
+  if (token.pos_detail_1 === '接尾' && token.pos_detail_2 === '助数詞')
+    return true;
+
+  if (
+    token.pos === '動詞' &&
+    token.conjugated_type === '一段' &&
+    token.pos_detail_1 === '非自立'
+  )
+    return true;
+
+  // (token.pos === "助動詞" && token.conjugated_form === "基本形") ||
+  // (token.pos === "助詞" && token.pos_detail_2 === "連語") ||
+  // (token.pos === "助詞" && token.pos_detail_1 === "接続助詞") ||
+
+  return false;
 }
