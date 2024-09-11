@@ -5,18 +5,23 @@ import type { DBKana, DBKanji, DBResultEntry, DBWord, ParsedWord, WordToken } fr
 const JMDICT_DB_PATH = "src/lib/jmdict/jmdict.db";
 
 export async function getDictionaryEntries(wordTokensArray: WordToken[]) {
- 
+  const db = new sqlite3.Database(JMDICT_DB_PATH);
+  db.run("PRAGMA journal_mode = WAL;");
+  
   const dictionaryEntries = await Promise.all(
     wordTokensArray.map(async (wordTokens) => ({
       ...wordTokens,
-      parsedText: await mapTokenWithDictionaryEntries(wordTokens.tokens),
+      parsedText: await mapTokenWithDictionaryEntries(db,wordTokens.tokens),
     })),
   );
+
+  db.close();
 
   return dictionaryEntries;
 }
 
 function mapTokenWithDictionaryEntries(
+  db: Database,
   tokens: KuromojiToken[],
 ): Promise<ParsedWord[]> {
   return Promise.all(
@@ -24,7 +29,7 @@ function mapTokenWithDictionaryEntries(
       const entry =
         token.word_type === "UNKNOWN"
           ? undefined
-          : await fetchDictionaryEntry(token.basic_form);
+          : await fetchDictionaryEntry(db, token.basic_form);
 
       return {
         text: token.surface_form,
@@ -39,13 +44,11 @@ function mapTokenWithDictionaryEntries(
 }
 
 async function fetchDictionaryEntry(
+  db: Database,
   word: string,
 ): Promise<DBResultEntry | undefined> {
   return new Promise(async (resolve) => {
-    // Open database
-    const db = new sqlite3.Database(JMDICT_DB_PATH);
-    db.run("PRAGMA journal_mode = WAL;");
-
+   
 
     const resultRow = await getWordId(db, word);
 
@@ -58,7 +61,7 @@ async function fetchDictionaryEntry(
 
     const dictionaryEntry = await fetchWord(db, wordId);
 
-    db.close();
+   
 
     if(!dictionaryEntry) {
         resolve(undefined);
