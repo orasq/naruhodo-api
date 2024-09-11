@@ -1,12 +1,10 @@
-import { KuromojiToken } from "kuromojin";
-import { tags } from "../utils/functions/getDictionaryTag";
+import { KuromojiToken } from 'kuromojin';
+import { tags } from '../utils/functions/getDictionaryTag';
 
 export type BatchItem = {
   baseText: string;
   index: number;
 };
-
-
 
 export type WordToken = {
   index: number;
@@ -86,7 +84,7 @@ export type FormatedDictionaryEntry = {
 
 export type ParsedWordDictionaryEntry = {
   wordBasicForm: string;
-  type: "kanji" | "kana";
+  type: 'kanji' | 'kana';
   fullEntry?: DBWord;
 };
 

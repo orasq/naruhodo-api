@@ -1,17 +1,23 @@
 {
   "name": "naruhodo-api",
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "prettier": "prettier --write 'src/**/*.ts'"
   },
   "dependencies": {
     "@hono/node-server": "^1.12.2",
-    "eslint": "^9.10.0",
     "hono": "^4.5.11",
     "kuromojin": "^3.0.0",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
-    "tsx": "^4.7.1"
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
+    "eslint": "^9.10.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.3",
+    "tsx": "^4.7.1",
+    "typescript": "^5.6.2"
   }
 }
