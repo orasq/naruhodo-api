@@ -9,11 +9,7 @@ const app = new Hono();
 app.use(
   '/api/*',
   cors({
-    origin: [
-      'http://localhost:3000',
-      'https://main--inspiring-cendol-8aec0d.netlify.app',
-      'https://inspiring-cendol-8aec0d.netlify.app',
-    ],
+    origin: ['http://localhost:3000', 'https://www.naruhodo.app'],
   }),
 );
 
