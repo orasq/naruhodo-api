@@ -28,4 +28,4 @@ lerna-debug.log*
 .DS_Store
 
 # DB
-.db
+src/lib/jmdict/jmdict.db
