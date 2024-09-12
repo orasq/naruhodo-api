@@ -2,22 +2,29 @@
   "name": "naruhodo-api",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "build": "tsx src/lib/jmdict/jmdictToSQLite.ts",
+    "predev": "npm run build",
     "prettier": "prettier --write 'src/**/*.ts'"
   },
+  "type": "module",
   "dependencies": {
     "@hono/node-server": "^1.12.2",
     "hono": "^4.5.11",
     "kuromojin": "^3.0.0",
-    "sqlite3": "^5.1.7"
+    "node-fetch": "^3.3.2",
+    "sqlite3": "^5.1.7",
+    "unzipper": "^0.12.3"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
+    "@types/node-fetch": "^2.6.11",
+    "@types/unzipper": "^0.10.10",
     "@typescript-eslint/eslint-plugin": "^8.5.0",
     "@typescript-eslint/parser": "^8.5.0",
     "eslint": "^9.10.0",
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.3",
-    "tsx": "^4.7.1",
+    "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   }
 }

@@ -72,6 +72,16 @@ export type RawDictionaryEntry = {
   }>;
 };
 
+export type RawJMDict = {
+  version: string;
+  languages: string[];
+  commonOnly: string;
+  dictDate: string;
+  dictRevisions: string[];
+  tags: object;
+  words: RawDictionaryEntry[];
+};
+
 export type FormatedDictionaryEntry = {
   currentWord: RawKanjiEntry | RawKanaEntry | undefined;
   readings?: string[];
