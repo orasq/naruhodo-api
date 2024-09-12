@@ -26,3 +26,6 @@ lerna-debug.log*
 
 # misc
 .DS_Store
+
+# DB
+src/lib/jmdict/jmdict.db
