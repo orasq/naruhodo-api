@@ -9,7 +9,7 @@ const app = new Hono();
 app.use(
   '/api/*',
   cors({
-    origin: ['http://localhost:3000', 'https://www.naruhodo.app'],
+    origin: ['http://localhost:3000', 'https://www.naruhodo.app', 'https://naruhodo.app'],
   }),
 );
 
