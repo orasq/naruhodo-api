@@ -10,10 +10,7 @@ export async function downloadAndExtractJson(
   outputPath: string,
 ): Promise<RawJMDict | undefined> {
   const outputDir = path.resolve(path.dirname(outputPath));
-  console.log({ outputDir, outputPath });
-
   const zipFilePath = path.join(outputDir, 'jmdict.zip');
-
   let parsedJson; // store the parsed JSON data to be returned
 
   try {

@@ -9,10 +9,15 @@ const JSON_FILE_PATH =
   'https://github.com/scriptin/jmdict-simplified/releases/download/3.5.0%2B20240909122502/jmdict-eng-3.5.0+20240909122502.json.zip';
 const FILE_NAME = 'jmdict-eng-3.5.0.json';
 const OUTPUT_FILE_PATH = './src/lib/jmdict/';
-const DB_NAME = 'jmdict.db';
+const OUTPUT_DB_PATH = './src/lib/jmdict/jmdict.db';
 
 // Function to convert JMDict JSON to SQLite
 async function jmdictToSQLite() {
+  if (fs.existsSync(OUTPUT_DB_PATH)) {
+    console.log('JMDict SQLite database already exists. Skipping conversion.');
+    return;
+  }
+
   const jsonData = await downloadAndExtractJson(JSON_FILE_PATH, FILE_NAME, OUTPUT_FILE_PATH);
 
   console.log('Start Converting DB to SQLite...');
@@ -20,7 +25,7 @@ async function jmdictToSQLite() {
   let converted = 0;
   let notConverted = 0;
 
-  const db = new sqlite3.Database(OUTPUT_FILE_PATH + DB_NAME);
+  const db = new sqlite3.Database(OUTPUT_DB_PATH);
   db.run('PRAGMA journal_mode = WAL;');
 
   // Create tables
@@ -94,7 +99,7 @@ async function jmdictToSQLite() {
 
 try {
   jmdictToSQLite()
-    .then(() => console.log('Conversion completed!'))
+    .then(() => console.log('It might take a few minutes...'))
     .catch((err) => console.error(err.message));
 } catch (err: any) {
   console.error(`Error: ${err.message}`);
