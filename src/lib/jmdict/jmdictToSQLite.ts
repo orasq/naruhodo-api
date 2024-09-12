@@ -2,7 +2,8 @@ import { downloadAndExtractJson } from '../utils/functions/downloadAndExtractJso
 
 import fs from 'fs';
 import sqlite3 from 'sqlite3';
-import path from 'path';
+
+// TODO: Use Promises for SQLite operations
 
 // TODO: use self-hosted JSON file
 const JSON_FILE_PATH =
